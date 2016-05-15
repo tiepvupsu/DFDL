@@ -1,5 +1,6 @@
 function tmp = displayPatches(D)
-
+a = randperm(size(D, 2));
+D = D(:, a(1:200));
 V=1;
 [n K] = size(D);
 size(D);

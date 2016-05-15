@@ -39,10 +39,12 @@ A _reduced_ version of ADL-Kidney dataset could be downloaded from:
 This version of DFDL has only been tested on MATLAB R2011a or later and all of 
 our testing was done on the Windows 7 platform.
 
+## Reporting errors 
+* This code is still in development stage; any comments or bug reports are very welcome.
+* If you encounter any bugs in my code, please report an issue [here](https://github.com/tiepvupsu/DFDL/issues). I'll try to fix them as soon as possible. 
 
 ## Contact information 
     1. Tiep Vu        : tiepvu@psu.edu
     2. Hojjat Mousavi : hojjat@psu.edu
     3. Vishal Monga   : vmonga@engr.psu.edu
 
-This code is still in development stage; any comments or bug reports are very welcome.
