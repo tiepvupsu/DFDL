@@ -3,9 +3,7 @@ First realease: May 21, 2015
 Last Modified: May, 15, 2016 
 
 ## Copyright
-Tiep H. Vu, Hojjat. S. Mousavi, V. Monga, A. U. Rao and G. Rao
-
-DFDL is distributed under the terms of the GNU General Public License 2.0.
+DFDL is distributed under the terms of the [GNU General Public License 2.0](http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).
 
 Permission to use, copy, modify, and distribute this software for any purpose 
 without fee is hereby granted, provided that this entire notice is included in 
