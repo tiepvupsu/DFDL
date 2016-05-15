@@ -1,0 +1,31 @@
+function pars = init_pars(pars, hh)
+	ext1                 = get(hh.edittext_ext_1, 'String');
+	ext2                 = get(hh.edittext_ext_2, 'String');
+	pars.flist1          = getAllFiles_ext(get(hh.edittext_dir_1, 'String'), ext1);
+	pars.flist2          = getAllFiles_ext(get(hh.edittext_dir_2, 'String'), ext2);
+	pars.nTrainingImages = str2num(get(hh.edittext_ntrain, 'String'));
+	pars.nTestImages1    = str2num(get(hh.edittext_ntest1,'String'));
+	pars.nTestImages2    = str2num(get(hh.edittext_ntest2,'String'));
+	pars.patchSize       = str2num(get(hh.edittext_patchsize, 'String'));
+	pars.numPatches      = str2num(get(hh.edittext_train_ptchs, 'String')); 
+	pars.dictsize        = str2num(get(hh.edittext_train_bases, 'String'));
+	pars.rho             = str2double(get(hh.edittext_rho, 'String'));
+	N1                   = length(pars.flist1); 
+	mixid                = randperm(N1); 
+	pars.train_img_ids1  = mixid(1:pars.nTrainingImages); 
+	pars.test_img_ids1   = mixid(pars.nTrainingImages+1: pars.nTrainingImages + pars.nTestImages1);
+	N2                   = length(pars.flist2); 
+	mixid                = randperm(N2); 
+	pars.train_img_ids2  = mixid(1:pars.nTrainingImages); 
+	pars.test_img_ids2   = mixid(pars.nTrainingImages+1: pars.nTrainingImages + pars.nTestImages2);
+    pars.imresize_ratio  = get(;
+	% pars.K = pars.dictsize*ones(1,2);
+	% pars.max_iter = 50;
+	% pars.rho = 0.001;
+	% pars.lambda = 0.1;
+	% pars.gamma = 0.1;
+	% % --------------- pars OMP -------------------------
+	% paramOMP.eps = 1e-5;
+	% paramOMP.numThreads = -1;
+	% pars.paramOMP = paramOMP;
+end 
