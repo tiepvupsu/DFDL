@@ -1,39 +1,43 @@
 function DFDL_main(pars)
-	%%%%%%%%%%%%%%%%%%%%%%%% Description %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	% DFDL_main: Run the procedure described in section III-C1 in our TMI paper
-	% INPUT:
-	%	1) pars : structure of parameters selected in GUI, see init_pars.m for more info
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-	%% ========= Step 0. Initialization parameters ==============================	
+% DFDL_main: Run the procedure described in section III-C1 in our TMI paper
+% INPUT:
+%	pars: structure of parameters selected in GUI, see init_pars.m for more info
+% -----------------------------------------------
+% Author: Tiep Vu, thv102@psu.edu, 5/15/2016 3:51:40 PM
+%         (http://www.personal.psu.edu/thv102/)
+% -----------------------------------------------
+	%% Step 0. Initialization parameters 	
     % pars
-	pars.K              = pars.dictsize*ones(1,2); % pars.K: array indicating #bases of each class
-	pars.max_iter       = 50;	% number of maximum iterations in the main DFDL
-	pars.lambda         = 0.1;  % lambda for ODL, see TMI paper
-	pars.gamma          = 0.1;	% gamma for SRC, see TMI paper  
-	% --------------- OMP pars for mexOMP - see SPAMS document for info--------------------
+	pars.K        = pars.dictsize*ones(1,2); 
+	                      % pars.K: array indicating #bases per class
+	pars.max_iter = 50;	  % number of maximum iterations in the main DFDL
+	pars.lambda   = 0.1;  % lambda for ODL, see TMI paper
+	pars.gamma    = 0.1;  % gamma for SRC, see TMI paper
+	%  OMP pars for mexOMP - see SPAMS document for info
 	% http://spams-devel.gforge.inria.fr/doc/html/index.html
 	paramOMP.eps        = 1e-5;
 	paramOMP.numThreads = -1;  
 	pars.paramOMP       = paramOMP;
-
-	%% ========= Step 1 ==============================	
+	%% Step 1.1. building patches 	
 	fprintf('Step 1.1. Building patches...\n');
-	[X, label]          = color_buildPatches(pars);	% buding training patches
+	[X, label]     = color_buildPatches(pars);	% buding training patches
 	fprintf('done\n');
 	Y = normc(double(X)); 	% normalize training patches before training
-	pars.C = [sum(label == 1) sum(label == 2)]; % number of actual training patches each class
-	%% ========= 1.2 Train dictionaries ==============================
+	pars.C = [sum(label == 1) sum(label == 2)]; 
+		% number of actual training patches per class
+	%%  Step 1.2 Train dictionaries 
 	fprintf('Step 1.2. Training dictionaries...\n');
 	[Model, pars] = DFDL(Y, pars);	% Run the main DFDL
 	D1    = Model.Dict(:,:,1);
 	D2    = Model.Dict(:,:,2);
-	% --------------- display example bases from each dictionary -------------------------
+	% display example bases from each dictionary 
 	drawnow;
 	figure(2);	
-	subplot(1,2,1); displayPatches(D1(:, 1: min(100, pars.dictsize))); title('Example bases from class 1');
-	subplot(1,2,2); displayPatches(D2(:, 1: min(100, pars.dictsize))); title('Example bases from class 2');
-	%% ========= 2.1. Find proportional of healthy patches (training images) ==============================
+	subplot(1,2,1); displayPatches(D1(:, 1: min(100, pars.dictsize))); 
+	title('Example bases from class 1');
+	subplot(1,2,2); displayPatches(D2(:, 1: min(100, pars.dictsize))); 
+	title('Example bases from class 2');
+	%% Step 2.1. Find proportional of healthy patches (training images) 
 	fprintf('Step 2. Find threshod theta\n')
 	ftr1 = zeros(1, pars.nTrainingImages);
 	ftr2 = zeros(1, pars.nTrainingImages);
@@ -41,21 +45,23 @@ function DFDL_main(pars)
 	for i = 1: pars.nTrainingImages
 		filename = pars.flist1{pars.train_img_ids1(i)};
 		feature = DFDLonImage(Model, pars, filename);
-		fprintf('id = %3d, filename = %41s, feature = %6f\n', i, filename(end - 25:end), feature);
+		fprintf('id = %3d, filename = %41s, feature = %6f\n', ...
+			i, filename(end - 25:end), feature);
 		ftr1(i) = feature;
 	end
 	fprintf('Class 2...\n');
 	for i = 1: pars.nTrainingImages
 		filename = pars.flist2{pars.train_img_ids2(i)};
 		feature = DFDLonImage(Model, pars, filename);
-		fprintf('id = %3d, filename = %41s, feature = %6f\n', i, filename(end - 25:end), feature);
+		fprintf('id = %3d, filename = %41s, feature = %6f\n', ...
+			i, filename(end - 25:end), feature);
 		ftr2(i) = feature;
 	end
-	%% ========= 2.2. Finding the threshold ==============================
+	%%  Step 2.2. Finding the threshold 
 	F               = [ftr1 ftr2];
 	[thresh, signH] = thrsh_roc_2(F, trainlabel);
 	fprintf('Threshold = %f\n', thresh);
-	%% ========= 3. Testing ==============================		
+	%%  Step 3. Testing 		
 	fprintf('Step 3. Test')
 	fprintf('Class 1 - test...\n');
 	ftest1 = zeros(1, numel(pars.test_img_ids1));
@@ -65,7 +71,8 @@ function DFDL_main(pars)
 		feature   = DFDLonImage(Model, pars, filename);
 		ftest1(i) = feature;
 		pred1(i)  = -0.5*signH*(2*(feature > thresh) -1) + 1.5;
-		fprintf('id = %3d, filename = %41s, feature = %6f, class = %d\n', i, filename(end - 25:end), feature, pred1(i));
+		fprintf('id = %3d, filename = %41s, feature = %6f, class = %d\n', ...
+			i, filename(end - 25:end), feature, pred1(i));
 	end
 	fprintf('Class 2 - test...\n');
 	for i = 1:  numel(pars.test_img_ids2)
@@ -73,7 +80,8 @@ function DFDL_main(pars)
 		feature   = DFDLonImage(Model, pars, filename);
 		ftest2(i) = feature;
 		pred2(i)  = -0.5*signH*(2*(feature > thresh) -1) + 1.5;
-		fprintf('id = %3d, filename = %41s, feature = %6f, class = %d\n', i, filename(end - 25:end), feature, pred2(i));
+		fprintf('id = %3d, filename = %20s, feature = %3f, class = %d\n', ...
+			i, filename(end - 25:end), feature, pred2(i));
 	end
 	%% ========= Report results ==============================
 	acc1 = sum(pred1 == 1)/numel(pred1);
@@ -99,10 +107,10 @@ function DFDL_main(pars)
 end
 
 function feature = DFDLonImage(Model, pars, img)
-	%% ========= 1. Build non-overlapping patches ==============================
+	%%  1. Build non-overlapping patches 
 	X = buildNonOverlappingPatches(pars, img);
 	Y = normc(double(X));
-	%% ========= SRC ==============================	
+	%%  SRC 	
 	D1                = Model.Dict(:,:,1);
 	D2                = Model.Dict(:,:,2);	
 	dictsize          = pars.dictsize;
@@ -118,7 +126,7 @@ function feature = DFDLonImage(Model, pars, img)
 	[~, pred]         = min(e);
 	feature           = sum(pred == 1)/numel(pred);
 end
-
+%% build non over lapping patches for each image.
 function X = buildNonOverlappingPatches(pars, img)
 	p       = pars.patchSize;
 	F       = imread(img);
@@ -130,7 +138,7 @@ function X = buildNonOverlappingPatches(pars, img)
 	X3      = im2col(F(:,:,3), [p p], 'distinct');
 	X       = [X1; X2; X3];
 end
-
+%% construct the ROC 
 function [FAR, MR] = DFDL_ROC(ftest1, ftest2)
 	N1      = numel(ftest1);
 	N2      = numel(ftest2);

@@ -9,20 +9,12 @@ function [X, label] = color_buildPatches(pars)
 end
 
 function [X] = buildPatches_class(pars, flist, ids)
-	numFiles = numel(ids);
-	patchSize = pars.patchSize;
-	ratio = pars.imresize_ratio;
-	% --------------- calculate pro -------------------------
-	% area = zeros(1, numFiles);
-	% for i = 1: numFiles
-	% 	img = imread(flist{ids(i)});
-	% 	sz = size(img);
-	% 	area(i) = sz(1) * sz(2);
-	% end
-	% patchesPerFile = round(pars.numPatches*area/sum(area));
+	numFiles       = numel(ids);
+	patchSize      = pars.patchSize;
+	ratio          = pars.imresize_ratio;
 	patchesPerFile = round(pars.numPatches/numFiles);
-	idpatch = 1;
-	Npatches = patchesPerFile*numFiles;
+	idpatch        = 1;
+	Npatches       = patchesPerFile*numFiles;
 
     X1 = zeros(patchSize^2, Npatches);
     X2 = zeros(patchSize^2, Npatches);
@@ -43,7 +35,7 @@ function [X] = buildPatches_class(pars, flist, ids)
             imdata_patch = img(rows, cols, 2); X2(:,idpatch) = imdata_patch(:);
             imdata_patch = img(rows, cols, 3); X3(:,idpatch) = imdata_patch(:);
             idpatch = idpatch + 1;
-            if mod(idpatch, 1000) == 0
+            if mod(idpatch, 5000) == 0
             	fprintf('%d/%d...', idpatch, Npatches);
             end
         end

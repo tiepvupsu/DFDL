@@ -4,7 +4,6 @@ function viewPatches(pars, hh)
 	set(hh.panel4, 'Visible', 'on');
 	set(hh.text_wait, 'Visible', 'on');
 	drawnow; 
-	pars.numPatches = 200;
 	fprintf('Building patches...');
 	[X, label]          = color_buildPatches(pars);
 	fprintf('done\n');
