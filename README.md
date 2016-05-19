@@ -43,6 +43,10 @@ our testing was done on the Windows 7 platform.
 * This code is still in development stage; any comments or bug reports are very welcome.
 * If you encounter any bugs in my code, please report an issue [here](https://github.com/tiepvupsu/DFDL/issues). I'll try to fix them as soon as possible. 
 
+## Review and rate my DFDL
+* Please [rate and review](http://www.mathworks.com/matlabcentral/fileexchange/57181-tiepvupsu-dfdl) to make the DFDL better. Thank you so much.
+ 
+
 ## Contact information 
     1. Tiep Vu        : tiepvu@psu.edu
     2. Hojjat Mousavi : hojjat@psu.edu
