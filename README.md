@@ -1,6 +1,7 @@
 # Discriminative Feature-oriented Dictionary Learning (DFDL)
 * First realease: May 21, 2015.
 * Last Modified: May, 15, 2016.
+* Best view in [GitHub](https://github.com/tiepvupsu/DFDL/blob/master/README.md).
 
 ## Copyright
 DFDL is distributed under the terms of the [GNU General Public License 2.0](http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).
