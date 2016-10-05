@@ -3,6 +3,9 @@
 * Last Modified: May, 15, 2016.
 * Best view in [GitHub](https://github.com/tiepvupsu/DFDL/blob/master/README.md).
 
+Author: [Tiep Vu, Penn State](http://www.personal.psu.edu/thv102/)
+[Project page](http://signal.ee.psu.edu/dfdl.html)
+
 ## Copyright
 DFDL is distributed under the terms of the [GNU General Public License 2.0](http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).
 
