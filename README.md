@@ -4,6 +4,7 @@
 * Best view in [GitHub](https://github.com/tiepvupsu/DFDL/blob/master/README.md).
 
 Author: [Tiep Vu, Penn State](http://www.personal.psu.edu/thv102/)
+
 [Project page](http://signal.ee.psu.edu/dfdl.html)
 
 ## Copyright
